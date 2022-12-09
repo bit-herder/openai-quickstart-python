@@ -10,26 +10,29 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 @app.route("/", methods=("GET", "POST"))
 def index():
     if request.method == "POST":
-        animal = request.form["animal"]
+        medium = request.form["medium"]
+        materials = request.form["materials"]
+        description = request.form["description"]
         response = openai.Completion.create(
             model="text-davinci-002",
-            prompt=generate_prompt(animal),
-            temperature=0.6,
+            prompt=generate_prompt(medium,materials,description),
+            temperature=.5,
+            max_tokens=200
         )
+        print(response)
         return redirect(url_for("index", result=response.choices[0].text))
 
     result = request.args.get("result")
     return render_template("index.html", result=result)
 
+def generate_prompt(medium,materials,description):
+    return """Suggest three names and descriptions for a piece of art in the medium provided. Use the Materials and Description provided below to add flavor to the description you write. Imagine you are writing from the perspective of a new york times art critic, but you also want the pieces to sell. Be very flowery and colorful with your language. 
 
-def generate_prompt(animal):
-    return """Suggest three names for an animal that is a superhero.
-
-Animal: Cat
-Names: Captain Sharpclaw, Agent Fluffball, The Incredible Feline
-Animal: Dog
-Names: Ruff the Protector, Wonder Canine, Sir Barks-a-Lot
-Animal: {}
-Names:""".format(
-        animal.capitalize()
+Medium: {}
+Materials: {}
+Description: {}
+Names and Description:""".format(
+        medium.capitalize(),
+        materials.capitalize(),
+        description.capitalize()
     )

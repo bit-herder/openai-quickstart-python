@@ -10,10 +10,12 @@
 
 <body>
   <img src="{{ url_for('static', filename='dog.png') }}" class="icon" />
-  <h3>Name my pet</h3>
+  <h3>Name and Description Art Generator</h3>
   <form action="/" method="post">
-    <input type="text" name="animal" placeholder="Enter an animal" required />
-    <input type="submit" value="Generate names" />
+    <input type="text" name="medium" placeholder="Enter an medium" required />
+    <input type="text" name="materials" placeholder="Enter an material" required />
+    <input type="text" name="description" placeholder="Enter an description" required />
+    <input type="submit" value="Generate" />
   </form>
   {% if result %}
   <div class="result">{{ result }}</div>
